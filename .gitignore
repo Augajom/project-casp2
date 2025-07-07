@@ -1,0 +1,28 @@
+# ============================
+# ไฟล์ที่ไม่ต้องการให้ขึ้น Git (โฟลเดอร์ Frontend)
+# ============================
+/front/node_modules/
+/front/dist/
+/front/build/
+/front/.env
+/front/npm-debug.log*
+/front/yarn-debug.log*
+/front/yarn-error.log*
+
+# ============================
+# ไฟล์ที่ไม่ต้องการให้ขึ้น Git (โฟลเดอร์ Backend)
+# ============================
+/back/node_modules/
+/back/dist/
+/back/build/
+/back/.env
+/back/npm-debug.log*
+/back/yarn-debug.log*
+/back/yarn-error.log*
+
+# ============================
+# ไฟล์ทั่วไปที่ไม่ควรขึ้น Git
+# ============================
+.env
+.DS_Store
+Thumbs.db

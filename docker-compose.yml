@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    volumes:
+      - ./front/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    restart: always
+    environment:
+      - TZ=Asia/Bangkok
+
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    restart: always
+    env_file:
+      - ./back/.env
+    depends_on:
+      mysql:
+       condition: service_healthy
+    volumes:
+      - ./back/Files:/app/Files
+    environment:
+      - TZ=Asia/Bangkok
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: casp2-phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      TZ: Asia/Bangkok
+      
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: casp2najanongbaw
+      MYSQL_DATABASE: casp2
+      TZ: Asia/Bangkok
+    healthcheck:
+      test: ["CMD-SHELL", "/mysql-healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./back/db/database.sql:/docker-entrypoint-initdb.d/database.sql
+      - ./mysql-healthcheck.sh:/mysql-healthcheck.sh
+    ports:
+      - "3306:3306"
+
+
+volumes:
+  mysql-data:
